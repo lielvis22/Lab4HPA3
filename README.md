@@ -4,13 +4,14 @@
 
 ## 📋 Contenido del Repositorio
 
-Aplicación de escritorio en **C# (Windows Forms)** que implementa un **CRUD** (Crear, Leer, Actualizar y Eliminar) de productos conectado a una base de datos **MySQL**. Cada producto tiene nombre, precio, cantidad e imagen.
+Aplicación de escritorio en **C# (Windows Forms)** que implementa un **CRUD** (Crear, Leer, Actualizar y Eliminar) de productos conectado a una base de datos **MySQL**. Cada producto tiene nombre, precio, cantidad, imagen y sus **fechas de creación y última modificación**.
 
 La práctica aplica los conceptos de Programación Orientada a Objetos vistos en clase:
 
 - **Interfaces:** la validación de campos se hace con la interfaz `IValidadorCampo`, implementada por `ValidadorTexto`, `ValidadorDecimal` y `ValidadorEntero` (polimorfismo).
 - **Consultas seguras:** los métodos `InsertSeguro`, `UpdateSeguro` y `DeleteSeguro` usan consultas parametrizadas para evitar la inyección SQL.
 - **Eventos del DataGridView:** al hacer clic en una fila, los datos del producto se cargan en el formulario para modificarlo o eliminarlo.
+- **Control de fechas:** cada registro guarda automáticamente cuándo se creó y cuándo se modificó por última vez.
 
 ## 🛠️ Tecnologías Utilizadas
 
@@ -70,6 +71,14 @@ La práctica aplica los conceptos de Programación Orientada a Objetos vistos en
 <img width="935" height="857" alt="image" src="https://github.com/user-attachments/assets/ac0872f2-59f9-4623-a405-3570de88768c" />
 <img width="967" height="862" alt="image" src="https://github.com/user-attachments/assets/0b457ce0-764e-4048-8237-aa272c025386" />
 
+- **Ejercicio 6 – Fecha de creación y de modificación:** la tabla `productos` tiene dos columnas nuevas, `fecha_creacion` y `fecha_modificacion`, y el grid las muestra con el formato `dd/MM/yyyy HH:mm`. El método `CargarDatosProductos(bool esModificacion)` decide qué fechas se envían a la base de datos:
+  - **Al guardar** (`esModificacion: false`): se registran **ambas fechas** con la fecha y hora actual (`DateTime.Now`).
+  - **Al modificar** (`esModificacion: true`): solo se actualiza `fecha_modificacion`. La fecha de creación **no cambia**.
+  - Antes de llenarse, el diccionario `myProducto` se limpia. Así un `UPDATE` nunca vuelve a enviar una `fecha_creacion` de una operación anterior.
+  - `Conexion.GetProductos` lee ambas fechas. Si alguna viene vacía (`NULL`), usa `DateTime.MinValue` para evitar errores.
+
+<!-- Agrega aquí tus capturas: un producto recién guardado (ambas fechas iguales) y el mismo producto después de modificarlo (solo cambia la fecha de modificación) -->
+
 ## 📁 Estructura de Carpetas o Directorios
 
 ```plaintext
@@ -77,9 +86,9 @@ CRUD_PRODUCTOS/
 ├── CRUD_PRODUCTOS.sln          # Solución de Visual Studio
 ├── CRUD_PRODUCTOS/
 │   ├── Program.cs              # Punto de entrada de la aplicación
-│   ├── Form1.cs                # Lógica del formulario (CRUD, eventos, validación)
+│   ├── Form1.cs                # Lógica del formulario (CRUD, eventos, validación, fechas)
 │   ├── Form1.Designer.cs       # Diseño de los controles del formulario
-│   ├── Producto.cs             # Clase modelo del producto
+│   ├── Producto.cs             # Clase modelo del producto (incluye FechaCreacion y FechaModificacion)
 │   ├── Conexion.cs             # Conexión a MySQL y métodos Insert/Update/Delete/Get
 │   ├── IValidadorCampo.cs      # Interfaz de validación
 │   ├── ValidadorTexto.cs       # Valida campos de texto (no vacíos)
@@ -107,12 +116,22 @@ CRUD_PRODUCTOS/
    USE productosdb;
 
    CREATE TABLE IF NOT EXISTS productos (
-       id       INT AUTO_INCREMENT PRIMARY KEY,
-       nombre   VARCHAR(100)   NOT NULL,
-       precio   DECIMAL(10,2)  NOT NULL,
-       cantidad INT            NOT NULL,
-       imagen   LONGBLOB       NULL
+       id                 INT AUTO_INCREMENT PRIMARY KEY,
+       nombre             VARCHAR(100)   NOT NULL,
+       precio             DECIMAL(10,2)  NOT NULL,
+       cantidad           INT            NOT NULL,
+       imagen             LONGBLOB       NULL,
+       fecha_creacion     DATETIME       DEFAULT CURRENT_TIMESTAMP,
+       fecha_modificacion DATETIME       DEFAULT CURRENT_TIMESTAMP
    );
+   ```
+
+   Si ya tenías la tabla creada sin las fechas, agrégalas con:
+
+   ```sql
+   ALTER TABLE productos
+     ADD COLUMN fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+     ADD COLUMN fecha_modificacion DATETIME DEFAULT CURRENT_TIMESTAMP;
    ```
 
 3. **Configurar la conexión.** En `Conexion.cs`, cambia el usuario y la contraseña de MySQL por los tuyos:
@@ -129,8 +148,8 @@ CRUD_PRODUCTOS/
 
 | Acción | Cómo se hace |
 |---|---|
-| Agregar | Llena Nombre, Precio y Cantidad, elige una imagen (clic en la imagen) y presiona **Guardar**. |
-| Modificar | Haz clic en una fila del grid, cambia los datos y presiona **Modificar**. |
+| Agregar | Llena Nombre, Precio y Cantidad, elige una imagen (clic en la imagen) y presiona **Guardar**. Las fechas de creación y modificación se registran solas. |
+| Modificar | Haz clic en una fila del grid, cambia los datos y presiona **Modificar**. Solo se actualiza la fecha de modificación. |
 | Eliminar | Haz clic en una fila del grid y presiona **Eliminar**. |
 | Buscar | Escribe en el campo **Búsqueda**. El grid se filtra automáticamente. |
 | Limpiar | Presiona **Limpiar** para vaciar el formulario y registrar un producto nuevo. |
