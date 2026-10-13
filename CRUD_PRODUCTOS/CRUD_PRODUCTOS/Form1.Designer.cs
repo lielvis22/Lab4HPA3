@@ -139,7 +139,7 @@
             // lblImage
             // 
             lblImage.AutoSize = true;
-            lblImage.Location = new Point(511, 125);
+            lblImage.Location = new Point(554, 128);
             lblImage.Name = "lblImage";
             lblImage.Size = new Size(58, 20);
             lblImage.TabIndex = 5;
@@ -186,13 +186,13 @@
             panel2.Location = new Point(30, 335);
             panel2.Margin = new Padding(3, 4, 3, 4);
             panel2.Name = "panel2";
-            panel2.Size = new Size(766, 71);
+            panel2.Size = new Size(900, 71);
             panel2.TabIndex = 0;
             // 
             // pictureBox2
             // 
             pictureBox2.Image = Properties.Resources.search;
-            pictureBox2.Location = new Point(496, 24);
+            pictureBox2.Location = new Point(829, 24);
             pictureBox2.Margin = new Padding(3, 4, 3, 4);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(55, 32);
@@ -205,7 +205,7 @@
             txtBusqueda.Location = new Point(139, 25);
             txtBusqueda.Margin = new Padding(3, 4, 3, 4);
             txtBusqueda.Name = "txtBusqueda";
-            txtBusqueda.Size = new Size(337, 27);
+            txtBusqueda.Size = new Size(649, 27);
             txtBusqueda.TabIndex = 1;
             txtBusqueda.TextChanged += txtBusqueda_TextChanged_1;
             // 
@@ -233,10 +233,10 @@
             // pictureBox1
             // 
             pictureBox1.Image = Properties.Resources.picture;
-            pictureBox1.Location = new Point(598, 125);
+            pictureBox1.Location = new Point(631, 125);
             pictureBox1.Margin = new Padding(3, 4, 3, 4);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(186, 136);
+            pictureBox1.Size = new Size(258, 159);
             pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox1.TabIndex = 10;
             pictureBox1.TabStop = false;
@@ -252,7 +252,7 @@
             dgvProductos.Name = "dgvProductos";
             dgvProductos.RowHeadersWidth = 51;
             dgvProductos.RowTemplate.Height = 80;
-            dgvProductos.Size = new Size(799, 300);
+            dgvProductos.Size = new Size(953, 300);
             dgvProductos.TabIndex = 11;
             dgvProductos.CellClick += dgvProductos_CellContentClick;
             dgvProductos.CellContentClick += dgvProductos_CellContentClick;
@@ -323,7 +323,7 @@
             btnModificar.ImageAlign = ContentAlignment.MiddleRight;
             btnModificar.ImageKey = "pen.png";
             btnModificar.ImageList = imageList1;
-            btnModificar.Location = new Point(245, 758);
+            btnModificar.Location = new Point(311, 760);
             btnModificar.Margin = new Padding(3, 4, 3, 4);
             btnModificar.Name = "btnModificar";
             btnModificar.Size = new Size(140, 44);
@@ -337,7 +337,7 @@
             btnEliminar.ImageAlign = ContentAlignment.MiddleRight;
             btnEliminar.ImageKey = "delete.png";
             btnEliminar.ImageList = imageList1;
-            btnEliminar.Location = new Point(425, 758);
+            btnEliminar.Location = new Point(540, 760);
             btnEliminar.Margin = new Padding(3, 4, 3, 4);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(123, 44);
@@ -351,7 +351,7 @@
             btnLimpiar.ImageAlign = ContentAlignment.MiddleRight;
             btnLimpiar.ImageKey = "clean.png";
             btnLimpiar.ImageList = imageList1;
-            btnLimpiar.Location = new Point(598, 756);
+            btnLimpiar.Location = new Point(772, 758);
             btnLimpiar.Margin = new Padding(3, 4, 3, 4);
             btnLimpiar.Name = "btnLimpiar";
             btnLimpiar.Size = new Size(117, 46);
@@ -365,7 +365,7 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
-            ClientSize = new Size(825, 833);
+            ClientSize = new Size(990, 833);
             Controls.Add(btnLimpiar);
             Controls.Add(btnEliminar);
             Controls.Add(btnModificar);

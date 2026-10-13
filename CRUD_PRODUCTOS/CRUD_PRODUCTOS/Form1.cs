@@ -9,6 +9,8 @@ namespace CRUD_PRODUCTOS
 
         private List<(TextBox txt, IValidadorCampo validador)> camposValidar
             = new List<(TextBox txt, IValidadorCampo validador)>();
+
+        private const string FORMATO_FECHA = "dd/MM/yyyy HH:mm";
         public Form1()
         {
             InitializeComponent();
@@ -21,8 +23,20 @@ namespace CRUD_PRODUCTOS
             // aunque el usuario teclee en minúscula (también al pegar texto)
             txtNombre.CharacterCasing = CharacterCasing.Upper;
 
+            agregarColumnasFechas();
         }
 
+        private void agregarColumnasFechas()
+        {
+            if (!dgvProductos.Columns.Contains("colFechaCreacion"))
+                dgvProductos.Columns.Add("colFechaCreacion", "Fecha creación");
+
+            if (!dgvProductos.Columns.Contains("colFechaModificacion"))
+                dgvProductos.Columns.Add("colFechaModificacion", "Última modificación");
+
+            dgvProductos.Columns["colFechaCreacion"].ReadOnly = true;
+            dgvProductos.Columns["colFechaModificacion"].ReadOnly = true;
+        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -50,7 +64,7 @@ namespace CRUD_PRODUCTOS
                     }
                 }
 
-                dgvProductos.Rows.Add(prod.Id, prod.Nombre, prod.Precio, prod.Cantidad, img);
+                dgvProductos.Rows.Add(prod.Id, prod.Nombre, prod.Precio, prod.Cantidad, img, prod.FechaCreacion.ToString(FORMATO_FECHA), prod.FechaModificacion.ToString(FORMATO_FECHA));
             }
         } // fin de cargarProductos
 
@@ -112,13 +126,31 @@ namespace CRUD_PRODUCTOS
             foreach (var item in camposValidar)
                 errorValidacion.SetError(item.txt, string.Empty);
         }
-        
-        private void CargarDatosProductos()
+
+        private void CargarDatosProductos(bool esModificacion = false)
         {
+            // Se limpia para no arrastrar claves de una operación anterior
+            // (por ejemplo, que un UPDATE vuelva a mandar fecha_creacion)
+            myProducto.Clear();
+
             myProducto["Cantidad"] = int.Parse(txtCantidad.Text.Trim());
             myProducto["Precio"] = decimal.Parse(txtPrecio.Text.Trim());
             myProducto["Nombre"] = txtNombre.Text.Trim();
             myProducto["Imagen"] = ImageToByteArray(pictureBox1.Image);
+
+            DateTime ahora = DateTime.Now;
+
+            if (!esModificacion)
+            {
+                // Al guardar uno nuevo, se establecen ambas fechas
+                myProducto["fecha_creacion"] = ahora;
+                myProducto["fecha_modificacion"] = ahora;
+            }
+            else
+            {
+                // Al modificar, solo se actualiza la fecha de modificación
+                myProducto["fecha_modificacion"] = ahora;
+            }
         }
 
         // ---------------------------------------------------
@@ -140,7 +172,7 @@ namespace CRUD_PRODUCTOS
         {
             if (datosCorrectos())
             {
-                CargarDatosProductos();
+                CargarDatosProductos(esModificacion: false);
 
                 if (Conexion.InsertSeguro("productos", myProducto))
                 {
@@ -213,7 +245,7 @@ namespace CRUD_PRODUCTOS
                 return;
             }
 
-            CargarDatosProductos();
+            CargarDatosProductos(esModificacion: true);
 
             if (Conexion.UpdateSeguro("productos", myProducto, idSeleccionado))
             {

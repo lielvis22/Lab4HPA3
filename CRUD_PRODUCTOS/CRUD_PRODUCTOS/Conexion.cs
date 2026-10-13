@@ -31,7 +31,7 @@ namespace CRUD_PRODUCTOS
         public static List<Producto> GetProductos(string filtro)
         {
             List<Producto> listaProductos = new List<Producto>();
-            string query = "SELECT id, nombre, precio, cantidad, imagen FROM productos";
+            string query = "SELECT id, nombre, precio, cantidad, imagen, fecha_creacion, fecha_modificacion FROM productos";
 
             if (!string.IsNullOrEmpty(filtro))
             {
@@ -61,6 +61,15 @@ namespace CRUD_PRODUCTOS
                             prod.Precio = Convert.ToDecimal(mReader["precio"]);
                             prod.Cantidad = Convert.ToInt32(mReader["cantidad"]);
                             prod.Imagen = mReader["imagen"] != DBNull.Value ? (byte[])mReader["imagen"] : null;
+
+                            // Fechas (si vienen vacías en la BD se usa DateTime.MinValue)
+                            prod.FechaCreacion = mReader["fecha_creacion"] != DBNull.Value
+                                ? Convert.ToDateTime(mReader["fecha_creacion"])
+                                : DateTime.MinValue;
+
+                            prod.FechaModificacion = mReader["fecha_modificacion"] != DBNull.Value
+                                ? Convert.ToDateTime(mReader["fecha_modificacion"])
+                                : DateTime.MinValue;
 
                             listaProductos.Add(prod);
                         }
@@ -100,7 +109,7 @@ namespace CRUD_PRODUCTOS
             catch (MySqlException ex)
             {
                 Console.WriteLine("Error en INSERT: " + ex.Message);
-                MessageBox.Show("Error en INSERT: " + ex.Message);  
+                MessageBox.Show("Error en INSERT: " + ex.Message);
                 return false;
             }
         }
