@@ -77,7 +77,9 @@ La práctica aplica los conceptos de Programación Orientada a Objetos vistos en
   - Antes de llenarse, el diccionario `myProducto` se limpia. Así un `UPDATE` nunca vuelve a enviar una `fecha_creacion` de una operación anterior.
   - `Conexion.GetProductos` lee ambas fechas. Si alguna viene vacía (`NULL`), usa `DateTime.MinValue` para evitar errores.
 
-<!-- Agrega aquí tus capturas: un producto recién guardado (ambas fechas iguales) y el mismo producto después de modificarlo (solo cambia la fecha de modificación) -->
+<img width="977" height="861" alt="image" src="https://github.com/user-attachments/assets/59a9d361-0294-4e3d-95ef-c5cb0d7ce4d4" />
+
+<img width="916" height="166" alt="image" src="https://github.com/user-attachments/assets/7b4207bd-c10e-4f5e-9239-cec7ae393583" />
 
 ## 📁 Estructura de Carpetas o Directorios
 
